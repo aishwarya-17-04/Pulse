@@ -42,9 +42,9 @@ def get_quote():
 #extra
 
 def get_dayfact():
-    """fetch a random fact about today's date from numbersapi."""
+    """fetch a random fact about today in history."""
     today = date.today()
-    url = f"https://numbersapi.com/{today.month}/{today.day}/date"
+    url = f" http://numbersapi.com/{today.month}/{today.day}/date"
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -92,6 +92,25 @@ def build_summary():
     return summary
 
 
+
+def send_email(summary_text):
+    """Send the daily summary via email (optional extra feature)."""
+    sender = os.environ.get("EMAIL_USER")
+    password = os.environ.get("EMAIL_PASS")
+    recipient = os.environ.get("EMAIL_TO")
+    msg = MIMEText(summary_text)
+    msg["Subject"] = "Pulse - Your Daily Summary"
+    msg["From"] = sender
+    msg["To"] = recipient
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender, password)
+        server.send_message(msg)
+    
+    print("Email Sent")
+
+
+
 #---------------------FUNCTION 5: Run Everything--------------------------------------
 
 def run():
@@ -111,22 +130,6 @@ def run():
     print("Pulse ran suscessfully. Summary saved to daily_summary.txt")
 
 
-
-def send_email(summary_text):
-    """Send the daily summary via email (optional extra feature)."""
-    sender = os.environ.get("EMAIL_USER")
-    password = os.environ.get("EMAIL_PASS")
-    recipient = os.environ.get("EMAIL_TO")
-    msg = MIMEText(summary_text)
-    msg["Subject"] = "Pulse - Your Daily Summary"
-    msg["From"] = sender
-    msg["To"] = recipient
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(sender, password)
-        server.send_message(msg)
-    
-    print("Email Sent")
 
 
 
