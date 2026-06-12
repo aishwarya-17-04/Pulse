@@ -105,7 +105,7 @@ def run():
     with open ("daily_summary.txt" , "w", encoding="utf-8") as f:
         f.write(summary)
     
-    # send_email(summary)  #optional extra feature to send the summary via email (make sure to set up email credentials in Github Secrets)
+    send_email(summary)  #optional extra feature to send the summary via email (make sure to set up email credentials in Github Secrets)
     
 
     print("Pulse ran suscessfully. Summary saved to daily_summary.txt")
