@@ -3,6 +3,8 @@
 #Runs: every day at 8 am IST via Github actions 
 #Apis: both free , no Api keys needed
 
+from random import random
+
 import requests
 from datetime import date
 import os
@@ -39,18 +41,18 @@ def get_quote():
         return f"Quote unavailable: ({e})"
     
 #------Function 3: Day Fact------------------------------------------------
-#extra
-
 def get_dayfact():
-    """fetch a random fact about today in history."""
-    today = date.today()
-    url = f" http://numbersapi.com/{today.month}/{today.day}/date"
     try:
-        response = requests.get(url, timeout=10)
+        response = requests.get(
+            "https://uselessfacts.jsph.pl/api/v2/facts/random",
+            timeout=10
+        )
         response.raise_for_status()
-        return response.text.strip()
+
+        return response.json()["text"]
+
     except Exception as e:
-        return f"Fact unavailable: ({e})"
+        return f"Fact unavailable: {e}"
 
 
 #---------FUNCTION 4: Build the Summary--------------------------------------
@@ -78,7 +80,7 @@ def build_summary():
 
     ==============================================================================================================
 
-    TODAY'S FACT  (◕‿◕)
+    USELESS FACT  (◕‿◕)
               {dayfact}
 
     ==============================================================================================================
